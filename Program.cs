@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using Telegram.Bot;
 
-namespace WalletBalanceChecker
+namespace ConsoleApp4
 {
     internal class Program
     {
@@ -51,8 +51,8 @@ namespace WalletBalanceChecker
             while (true)
             {
                 await CheckBalancesAndNotifyAsync();
-                await CheckTotalStakedAsync();
-                //await CheckTokenPriceAndNotifyAsync(); // Добавляем проверку цены токена VELO
+                //await CheckTotalStakedAsync();
+                
                 Console.WriteLine($"Проверка завершена. Следующая проверка через 10 минут...");
                 Thread.Sleep(TimeSpan.FromMinutes(10)); // Задержка 10 минут
             }
@@ -108,81 +108,51 @@ namespace WalletBalanceChecker
             }
         }
 
-        private static async Task CheckTotalStakedAsync()
-        {
-            var web3 = new Web3(RpcUrl);
-            string abi = @"[ { ""constant"": true, ""inputs"": [], ""name"": ""totalStaked"", ""outputs"": [ { ""name"": """", ""type"": ""uint256"" } ], ""payable"": false, ""stateMutability"": ""view"", ""type"": ""function"" } ]";
-            string methodName = "totalStaked";
-            BigInteger totalLockedValue = BigInteger.Zero;
+        ////private static async Task CheckTotalStakedAsync()
+        ////{
+        ////    var web3 = new Web3(RpcUrl);
+        ////    string abi = @"[ { ""constant"": true, ""inputs"": [], ""name"": ""totalStaked"", ""outputs"": [ { ""name"": """", ""type"": ""uint256"" } ], ""payable"": false, ""stateMutability"": ""view"", ""type"": ""function"" } ]";
+        ////    string methodName = "totalStaked";
+        ////    BigInteger totalLockedValue = BigInteger.Zero;
 
-            foreach (var address in Addresses)
-            {
-                try
-                {
-                    var contract = web3.Eth.GetContract(abi, address);
-                    var totalStakedFunction = contract.GetFunction(methodName);
-                    var result = await totalStakedFunction.CallAsync<BigInteger>();
-                    totalLockedValue += result;
-                    Console.WriteLine($"Address: {address}, Total Staked: {Web3.Convert.FromWei(result)}");
+        ////    foreach (var address in Addresses)
+        ////    {
+        ////        try
+        ////        {
+        ////            var contract = web3.Eth.GetContract(abi, address);
+        ////            var totalStakedFunction = contract.GetFunction(methodName);
+        ////            var result = await totalStakedFunction.CallAsync<BigInteger>();
+        ////            totalLockedValue += result;
+        ////            Console.WriteLine($"Address: {address}, Total Staked: {Web3.Convert.FromWei(result)}");
 
-                    // Проверка на значительное изменение TVL
-                    if (LastTotalStaked.ContainsKey(address))
-                    {
-                        decimal newTotalStaked = Web3.Convert.FromWei(result);
-                        decimal lastTotalStaked = Web3.Convert.FromWei(LastTotalStaked[address]);
+        ////            Проверка на значительное изменение TVL
+        ////            if (LastTotalStaked.ContainsKey(address))
+        ////            {
+        ////                decimal newTotalStaked = Web3.Convert.FromWei(result);
+        ////                decimal lastTotalStaked = Web3.Convert.FromWei(LastTotalStaked[address]);
 
-                        decimal percentageChange = (newTotalStaked - lastTotalStaked) / lastTotalStaked * 100;
-                        if (Math.Abs(percentageChange) > 10)
-                        {
-                            // Отправка сообщения в Telegram
-                            await SendTelegramMessageAsync($"Значительное изменение TVL на {percentageChange:N2}% для адреса {address} — возможно, пора проверять цену.");
-                        }
-                    }
+        ////                decimal percentageChange = (newTotalStaked - lastTotalStaked) / lastTotalStaked * 100;
+        ////                if (Math.Abs(percentageChange) > 10)
+        ////                {
+        ////                    Отправка сообщения в Telegram
+        ////                    await SendTelegramMessageAsync($"Значительное изменение TVL на {percentageChange:N2}% для адреса {address} — возможно, пора проверять цену.");
+        ////                }
+        ////            }
 
-                    // Обновляем значение TVL для адреса
-                    LastTotalStaked[address] = result;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Ошибка при обработке адреса {address} для TVL: {ex.Message}");
-                }
-            }
+        ////            Обновляем значение TVL для адреса
+        ////           LastTotalStaked[address] = result;
+        ////        }
+        ////        catch (Exception ex)
+        ////        {
+        ////            Console.WriteLine($"Ошибка при обработке адреса {address} для TVL: {ex.Message}");
+        ////        }
+        ////    }
 
-            // Отправка общего TVL в Telegram
-            string totalLockedValueMessage = $"Общий TVL: {Web3.Convert.FromWei(totalLockedValue)}";
-            await SendTelegramMessageAsync(totalLockedValueMessage);  // Отправляем сообщение в Telegram
-        }
+        ////    Отправка общего TVL в Telegram
+        ////    string totalLockedValueMessage = $"Общий TVL: {Web3.Convert.FromWei(totalLockedValue)}";
+        ////    await SendTelegramMessageAsync(totalLockedValueMessage);  // Отправляем сообщение в Telegram
+        ////}
 
-        //private static async Task<decimal> GetTokenPriceAsync(string tokenSymbol)
-        //{
-        //    var client = new RestClient($"https://api.coingecko.com/api/v3/simple/price?ids={tokenSymbol}&vs_currencies=usd");
-        //    var request = new RestRequest($"?ids={tokenSymbol}&vs_currencies=usd", Method.Get); // Метод передаем как строку
-
-        //    var response = await client.ExecuteAsync(request);
-
-        //    if (response.IsSuccessful)
-        //    {
-        //        var priceData = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, decimal>>>(response.Content);
-        //        return priceData[tokenSymbol]["usd"];
-        //    }
-        //    return 0;
-        //}
-        //private static async Task CheckTokenPriceAndNotifyAsync()
-        //{
-        //    decimal currentPrice = await GetTokenPriceAsync("velodrome"); // Получаем цену токена VELO с CoinGecko
-        //    decimal priceThreshold = 5.0m; // Например, пороговое значение для продажи
-
-        //    Console.WriteLine($"Текущая цена токена VELO: {currentPrice}");
-
-        //    if (currentPrice > priceThreshold)
-        //    {
-        //        await SendTelegramMessageAsync("Цена токенов VELO высокая, можно рассмотреть продажу.");
-        //    }
-        //    else
-        //    {
-        //        await SendTelegramMessageAsync("Цена токенов VELO низкая, можно рассмотреть покупку.");
-        //    }
-        //}
 
 
 

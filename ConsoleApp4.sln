@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp4", "ConsoleApp4.csproj", "{3D863B10-FE1A-43E4-ADF9-EBC7C0A1F8F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnifiedMonitoring", "..\UnifiedMonitoring\UnifiedMonitoring.csproj", "{FD9F7BEA-8849-472A-8159-BDB0FE3615DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3D863B10-FE1A-43E4-ADF9-EBC7C0A1F8F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D863B10-FE1A-43E4-ADF9-EBC7C0A1F8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D863B10-FE1A-43E4-ADF9-EBC7C0A1F8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D863B10-FE1A-43E4-ADF9-EBC7C0A1F8F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9F7BEA-8849-472A-8159-BDB0FE3615DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9F7BEA-8849-472A-8159-BDB0FE3615DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9F7BEA-8849-472A-8159-BDB0FE3615DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9F7BEA-8849-472A-8159-BDB0FE3615DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

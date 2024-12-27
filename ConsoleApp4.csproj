@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nethereum.Web3" Version="4.26.0" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="CsvHelper.Excel.Core" Version="27.2.1" />
+    <PackageReference Include="Microsoft.ML" Version="4.0.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.27.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="Telegram.Bot" Version="22.2.0" />
   </ItemGroup>
